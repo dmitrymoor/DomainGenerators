@@ -34,15 +34,13 @@ public class SpatialDomainGenerator
 	/**
 	 * Constructor.
 	 * @param numberOfGoods - the number of goods in the auction
-	 * @param numberOfAtomicBids - the number of atomic bids to be generated
 	 * @param dependencyGraph - the graph representing the spatial domain
 	 * @param agentId - an id of an agent for which the bid should be generated
 	 */
-	public SpatialDomainGenerator(int numberOfGoods, int numberOfAtomicBids, Graph dependencyGraph, int agentId)
+	public SpatialDomainGenerator(int numberOfGoods, Graph dependencyGraph, int agentId)
 	{
 		init();
 		_numberOfGoods = numberOfGoods;
-		_numberOfAtoms  = numberOfAtomicBids;
 		_dependencyGraph = dependencyGraph;
 		_agentId = agentId;
 			
@@ -279,7 +277,7 @@ public class SpatialDomainGenerator
 	
 	protected int _agentId;										//An id of the agent for which the bid should be generated
 	protected int _numberOfGoods;								//Number of goods in the auction
-	protected int _numberOfAtoms;								//Number of atomic bids to be generated
+	//protected int _numberOfAtoms;								//Number of atomic bids to be generated
 	protected Graph _dependencyGraph;							//Dependency graph for the spatial domain
 	protected List<Double> _commonValue;						//Common value of bidders for goods
 	protected List<AtomicBid> _bids;							//A list of generated atomic bids
