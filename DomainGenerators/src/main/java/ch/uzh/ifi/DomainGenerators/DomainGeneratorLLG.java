@@ -35,7 +35,7 @@ public class DomainGeneratorLLG implements IDomainGenerator
 		generator.setSeed(seed);
 		
 		AtomicBid atom;
-	
+
 		if( agentId == 1 )													//If this is a type of a local bidder
 		{
 			double newValue =  generator.nextDouble();				

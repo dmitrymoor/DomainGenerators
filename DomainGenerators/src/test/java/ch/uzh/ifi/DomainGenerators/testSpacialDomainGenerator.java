@@ -139,7 +139,7 @@ public class testSpacialDomainGenerator
 		generator.buildProximityGraph();
 		Graph grid = generator.getGrid();
 		
-		SpatialDomainGenerator spatialDomainGenerator = new SpatialDomainGenerator(numberOfRows * numberOfColumns, 1, grid, 1);
+		SpatialDomainGenerator spatialDomainGenerator = new SpatialDomainGenerator(numberOfRows * numberOfColumns, grid, 1);
 		spatialDomainGenerator.generateSpacialBids(1234*234);
 		List<AtomicBid> bid1 = spatialDomainGenerator.getBid();
 		
@@ -173,7 +173,7 @@ public class testSpacialDomainGenerator
 		generator.buildProximityGraph();
 		Graph grid = generator.getGrid();
 		
-		SpatialDomainGenerator spatialDomainGenerator = new SpatialDomainGenerator(9, 1, grid, 1);
+		SpatialDomainGenerator spatialDomainGenerator = new SpatialDomainGenerator(9, grid, 1);
 		spatialDomainGenerator.generateSpacialBids(0);
 		
 		List<AtomicBid> bid = spatialDomainGenerator.getBid();
@@ -207,7 +207,7 @@ public class testSpacialDomainGenerator
 		generator.buildProximityGraph();
 		Graph grid = generator.getGrid();
 		
-		SpatialDomainGenerator spatialDomainGenerator = new SpatialDomainGenerator(numberOfGoods, numberOfAtoms, grid, 1);
+		SpatialDomainGenerator spatialDomainGenerator = new SpatialDomainGenerator(numberOfGoods, grid, 1);
 		spatialDomainGenerator.generateSpacialBids(0);
 		
 		List<AtomicBid> bid = spatialDomainGenerator.getBid();
