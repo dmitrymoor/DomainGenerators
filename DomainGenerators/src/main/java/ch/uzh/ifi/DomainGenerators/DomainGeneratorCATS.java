@@ -20,15 +20,15 @@ public class DomainGeneratorCATS implements IDomainGenerator
 	 * @param numberOfGoods the number of goods in the auction
 	 * @param grid the spatial proximity graph
 	 */
-	public DomainGeneratorCATS(int numberOfGoods, Graph grid)
-	{
+	public DomainGeneratorCATS(int numberOfGoods, Graph grid)		//TODO: the grid should be generated internally
+	{																//TODO: jpmf should be a part of the domain (perhaps another class DomainGeneratorCATSUncertain )
 		_numberOfGoods = numberOfGoods;
 		_grid = grid;
 	}
 
 	/**
 	 * (non-Javadoc)
-	 * @see ch.uzh.ifi.MechanismDesignPrimitives.IDomainGenerator#generateBid(long, ch.uzh.ifi.MechanismDesignPrimitives.Type)
+	 * @see ch.uzh.ifi.MechanismDesignPrimitives.IDomainGenerator#generateBid(long, int)
 	 */
 	@Override
 	public Type generateBid(long seed, int agentId)
@@ -51,7 +51,7 @@ public class DomainGeneratorCATS implements IDomainGenerator
 		return ct;
 	}
 	
-	private int _numberOfGoods;
-	private Graph _grid;
-	private SpatialDomainGenerator _spatialDomainGenerator;
+	private int _numberOfGoods;											//Number of goods in the auction
+	private Graph _grid;												//Spatial proximity graph
+	private SpatialDomainGenerator _spatialDomainGenerator;				//Spatial domain generator
 }
