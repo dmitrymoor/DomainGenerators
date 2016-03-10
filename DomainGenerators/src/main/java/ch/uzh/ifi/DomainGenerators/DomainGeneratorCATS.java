@@ -67,7 +67,7 @@ public class DomainGeneratorCATS implements IDomainGenerator
 		_grid = gridGenerator.getGrid();
 	}
 	
-	private int _numberOfGoods;											//Number of goods in the auction
-	private Graph _grid;												//Spatial proximity graph
-	private SpatialDomainGenerator _spatialDomainGenerator;				//Spatial domain generator
+	protected int _numberOfGoods;										//Number of goods in the auction
+	protected Graph _grid;												//Spatial proximity graph
+	protected SpatialDomainGenerator _spatialDomainGenerator;			//Spatial domain generator
 }
