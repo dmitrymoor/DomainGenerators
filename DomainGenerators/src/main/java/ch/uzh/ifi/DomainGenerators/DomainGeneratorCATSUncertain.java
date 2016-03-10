@@ -22,7 +22,6 @@ public class DomainGeneratorCATSUncertain extends DomainGeneratorCATS
 	public DomainGeneratorCATSUncertain(int numberOfGoods) 
 	{
 		super(numberOfGoods);
-		generateJPMF();
 		_primaryReductionCoef = null;
 		_secondaryReductionCoef = null;
 		_probabilityOfBeingChosen = null;
@@ -32,7 +31,7 @@ public class DomainGeneratorCATSUncertain extends DomainGeneratorCATS
 	/**
 	 * The method generates a joint probability mass function.
 	 */
-	private void generateJPMF()
+	public void generateJPMF()
 	{
 		if( _primaryReductionCoef == null) 		throw new RuntimeException("Primary reduction coefficients are not specified");
 		if( _secondaryReductionCoef == null) 	throw new RuntimeException("Secondary reduction coefficients are not specified");
@@ -82,6 +81,15 @@ public class DomainGeneratorCATSUncertain extends DomainGeneratorCATS
 		_secondaryReductionCoef = secondaryReductionCoef;
 		_probabilityOfBeingChosen = probabilityOfBeingChosen;
 		_probabilityOfExplosion = probabilityOfExplosion;
+	}
+	
+	/**
+	 * The method returns the jpmf generated for the domain.
+	 * @return the jpmf
+	 */
+	public JointProbabilityMass getJPMF()
+	{
+		return _jpmf;
 	}
 	
 	protected JointProbabilityMass _jpmf;
