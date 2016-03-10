@@ -4,6 +4,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import ch.uzh.ifi.MechanismDesignPrimitives.FocusedBombingStrategy;
 import ch.uzh.ifi.MechanismDesignPrimitives.IBombingStrategy;
 import ch.uzh.ifi.MechanismDesignPrimitives.JointProbabilityMass;
@@ -14,6 +17,9 @@ import ch.uzh.ifi.MechanismDesignPrimitives.JointProbabilityMass;
  */
 public class DomainGeneratorCATSUncertain extends DomainGeneratorCATS
 {
+	
+	private static final Logger _logger = LogManager.getLogger(DomainGeneratorCATSUncertain.class);
+	
 	/***
 	 * Constructor
 	 * @param numberOfGoods number of goods in the auction
@@ -21,6 +27,7 @@ public class DomainGeneratorCATSUncertain extends DomainGeneratorCATS
 	public DomainGeneratorCATSUncertain(int numberOfGoods) 
 	{
 		super(numberOfGoods);
+		_logger.debug("DomainGeneratorCATSUncertain(numberOfGoods="+numberOfGoods+")");
 		_primaryReductionCoef = null;
 		_secondaryReductionCoef = null;
 		_probabilityOfBeingChosen = null;
@@ -32,6 +39,7 @@ public class DomainGeneratorCATSUncertain extends DomainGeneratorCATS
 	 */
 	public void generateJPMF()
 	{
+		_logger.debug("-> generateJPMF()");
 		if( _primaryReductionCoef == null) 		throw new RuntimeException("Primary reduction coefficients are not specified");
 		if( _secondaryReductionCoef == null) 	throw new RuntimeException("Secondary reduction coefficients are not specified");
 		if( _probabilityOfBeingChosen == null) 	throw new RuntimeException("Probabilities of being chosen are not specified");
@@ -43,6 +51,7 @@ public class DomainGeneratorCATSUncertain extends DomainGeneratorCATS
 		_jpmf.setNumberOfBombsToThrow(_numberOfBombsToThrow);
 		_jpmf.setBombs(bombs, _probabilityOfBeingChosen);
 		_jpmf.update();
+		_logger.debug("<- generateJPMF()");
 	}
 	
 	/**
@@ -77,10 +86,10 @@ public class DomainGeneratorCATSUncertain extends DomainGeneratorCATS
 		if( Math.abs( probabilityOfBeingChosen.stream().reduce( (x1, x2) -> x1 + x2).get() - 1.) > 1e-6 )
 			throw new RuntimeException("The probability distribution must be normalized");
 		
-		_primaryReductionCoef = primaryReductionCoef;
-		_secondaryReductionCoef = secondaryReductionCoef;
-		_probabilityOfBeingChosen = probabilityOfBeingChosen;
-		_probabilityOfExplosion = probabilityOfExplosion;
+		_primaryReductionCoef = primaryReductionCoef;			_logger.debug("Primary reduction coef: " + _primaryReductionCoef.toString());
+		_secondaryReductionCoef = secondaryReductionCoef;		_logger.debug("Secondary reduction coef: " + _secondaryReductionCoef.toString());
+		_probabilityOfBeingChosen = probabilityOfBeingChosen;	_logger.debug("Probability of being chosen: " + _probabilityOfBeingChosen.toString());
+		_probabilityOfExplosion = probabilityOfExplosion;		_logger.debug("Probability of explosion: " + _probabilityOfExplosion.toString());
 	}
 	
 	/**
