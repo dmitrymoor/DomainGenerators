@@ -18,6 +18,9 @@
     <Logger name="ch.uzh.ifi.DomainGenerators.SpatialDomainGenerator" level="ERROR" additivity="false">
       <AppenderRef ref="Console"/>
     </Logger>
+    <Logger name="ch.uzh.ifi.DomainGenerators.DomainGeneratorCATSUncertain" level="ERROR" additivity="false">
+      <AppenderRef ref="Console"/>
+    </Logger>
     <Root level="debug">
       <AppenderRef ref="Console" level="DEBUG"/>
     </Root>
