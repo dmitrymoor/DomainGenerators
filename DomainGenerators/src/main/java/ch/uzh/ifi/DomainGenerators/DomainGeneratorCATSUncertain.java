@@ -14,7 +14,6 @@ import ch.uzh.ifi.MechanismDesignPrimitives.JointProbabilityMass;
  */
 public class DomainGeneratorCATSUncertain extends DomainGeneratorCATS
 {
-
 	/***
 	 * Constructor
 	 * @param numberOfGoods number of goods in the auction
@@ -38,11 +37,10 @@ public class DomainGeneratorCATSUncertain extends DomainGeneratorCATS
 		if( _probabilityOfBeingChosen == null) 	throw new RuntimeException("Probabilities of being chosen are not specified");
 		if( _probabilityOfExplosion == null) 	throw new RuntimeException("Probabilities of explosion are not specified");
 		
+		List<IBombingStrategy> bombs = IntStream.range(0, _probabilityOfBeingChosen.size()).boxed().parallel().map( i -> new FocusedBombingStrategy( _grid, _probabilityOfExplosion.get(i), _primaryReductionCoef.get(i), _secondaryReductionCoef.get(i))).collect(Collectors.toList());
 		_jpmf = new JointProbabilityMass( _grid );
 		_jpmf.setNumberOfSamples(_numberOfJPMFSamples);
 		_jpmf.setNumberOfBombsToThrow(_numberOfBombsToThrow);
-		
-		List<IBombingStrategy> bombs = IntStream.range(0, _probabilityOfBeingChosen.size()).boxed().parallel().map( i -> new FocusedBombingStrategy( _grid, _probabilityOfExplosion.get(i), _primaryReductionCoef.get(i), _secondaryReductionCoef.get(i))).collect(Collectors.toList());
 		_jpmf.setBombs(bombs, _probabilityOfBeingChosen);
 		_jpmf.update();
 	}
@@ -76,6 +74,8 @@ public class DomainGeneratorCATSUncertain extends DomainGeneratorCATS
 	{
 		if( (primaryReductionCoef.size() != secondaryReductionCoef.size()) || (primaryReductionCoef.size() != probabilityOfBeingChosen.size()) || (primaryReductionCoef.size() != probabilityOfExplosion.size()) )
 			throw new RuntimeException("Dimensionality mismatch");
+		if( Math.abs( probabilityOfBeingChosen.stream().reduce( (x1, x2) -> x1 + x2).get() - 1.) > 1e-6 )
+			throw new RuntimeException("The probability distribution must be normalized");
 		
 		_primaryReductionCoef = primaryReductionCoef;
 		_secondaryReductionCoef = secondaryReductionCoef;
@@ -92,11 +92,11 @@ public class DomainGeneratorCATSUncertain extends DomainGeneratorCATS
 		return _jpmf;
 	}
 	
-	protected JointProbabilityMass _jpmf;
-	protected int _numberOfJPMFSamples = 10000;
-	protected int _numberOfBombsToThrow = 1;
-	protected List<Double> _primaryReductionCoef;
-	protected List<Double> _secondaryReductionCoef;
-	protected List<Double> _probabilityOfBeingChosen;
-	protected List<Double> _probabilityOfExplosion;
+	protected JointProbabilityMass _jpmf;					//Joint probability mass function
+	protected int _numberOfJPMFSamples = 10000;				//The number of samples to be used for generating of the jpmf
+	protected int _numberOfBombsToThrow = 1;				//The number of bombs to throw when sampling the jpmf
+	protected List<Double> _primaryReductionCoef;			//Primary reduction coefficients of the focused bombing strategy
+	protected List<Double> _secondaryReductionCoef;			//Secondary reduction coefficients of the focused bombing strategy
+	protected List<Double> _probabilityOfBeingChosen;		//List of probabilities of different bombs too be chosen
+	protected List<Double> _probabilityOfExplosion;			//List of probabilities of each particular bomb to explode
 }
