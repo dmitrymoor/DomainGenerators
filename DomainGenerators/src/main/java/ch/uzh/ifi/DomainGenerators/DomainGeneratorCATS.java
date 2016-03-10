@@ -20,10 +20,10 @@ public class DomainGeneratorCATS implements IDomainGenerator
 	 * @param numberOfGoods the number of goods in the auction
 	 * @param grid the spatial proximity graph
 	 */
-	public DomainGeneratorCATS(int numberOfGoods, Graph grid)		//TODO: the grid should be generated internally
-	{																//TODO: jpmf should be a part of the domain (perhaps another class DomainGeneratorCATSUncertain )
+	public DomainGeneratorCATS(int numberOfGoods)
+	{												//TODO: jpmf should be a part of the domain (perhaps another class DomainGeneratorCATSUncertain )
 		_numberOfGoods = numberOfGoods;
-		_grid = grid;
+		generateGrid();
 	}
 
 	/**
@@ -49,6 +49,22 @@ public class DomainGeneratorCATS implements IDomainGenerator
 		Type ct = new CombinatorialType();
 		bid.stream().parallel().forEach( i -> ct.addAtomicBid(i) );
 		return ct;
+	}
+	
+	/**
+	 * The method generates a rectangular spatial proximity graph (grid)
+	 */
+	private void generateGrid()
+	{
+		int nRows = (int)Math.round( Math.sqrt(_numberOfGoods));
+		int nCols = _numberOfGoods / nRows;
+		
+		if( nRows * nCols != _numberOfGoods ) throw new RuntimeException("Error when computing grid dimensions: nRows=" + nRows + " nCols="+nCols);
+		
+		GridGenerator gridGenerator = new GridGenerator(nRows, nCols);
+		gridGenerator.setSeed(0);
+		gridGenerator.buildProximityGraph();
+		_grid = gridGenerator.getGrid();
 	}
 	
 	private int _numberOfGoods;											//Number of goods in the auction
