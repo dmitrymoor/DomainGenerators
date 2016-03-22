@@ -53,6 +53,7 @@ public class DomainGeneratorLLG implements IDomainGenerator
 		}
 		else throw new RuntimeException("Too many agents for LLG domain.");
 
+		atom.setTypeComponent(AtomicBid.IsBidder, 1.0); 					//Generate a forward auction
 		return new CombinatorialType(atom);
 	}	
 }
