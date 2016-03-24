@@ -10,7 +10,7 @@ import ch.uzh.ifi.DomainGenerators.SpatialDomainGenerator;
 import ch.uzh.ifi.GraphAlgorithms.Graph;
 
 /**
- * The class generates bids using CATS application.
+ * The class generates bids using CATS "regions".
  * @author Dmitry Moor
  */
 public class DomainGeneratorCATS implements IDomainGenerator

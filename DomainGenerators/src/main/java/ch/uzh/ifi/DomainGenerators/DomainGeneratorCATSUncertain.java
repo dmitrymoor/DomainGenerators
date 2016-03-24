@@ -56,7 +56,7 @@ public class DomainGeneratorCATSUncertain extends DomainGeneratorCATS
 	
 	/**
 	 * The method sets up the number of sample to be used by the JPMF generator.
-	 * @param numberOfJPMFSamples
+	 * @param numberOfJPMFSamples number of samples to be used to generate the joint probability mass function
 	 */
 	public void setNumberOfJPMFSamples(int numberOfJPMFSamples)
 	{
