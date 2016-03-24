@@ -20,7 +20,7 @@ import ch.uzh.ifi.MechanismDesignPrimitives.Type;
 
 public class testDomainGeneratorInterfaces 
 {
-	/*
+	/**
 	 * Test for the LLG domain generator
 	 */
 	@Test
@@ -75,12 +75,36 @@ public class testDomainGeneratorInterfaces
 		AtomicBid atom11 = new AtomicBid(1, Arrays.asList( items.get(0) ), marginalValueL1);
 		CombinatorialType t = new CombinatorialType( atom11 );
 		
+		IDomainGenerator catsDomainGenerator = new DomainGeneratorCATS(numberOfGoods);
+		
+		Type[] ct = new Type[numberOfAgents];
+		for(int i = 0; i < numberOfAgents; ++i)
+			ct[i] = catsDomainGenerator.generateBid(10*i, i+1);
+//		IntStream.range(0, numberOfAgents).boxed().parallel().forEach( i -> ct[i] = catsDomainGenerator.generateBid(10*i, i+1) );
+		IntStream.range(0, numberOfAgents).boxed().parallel().forEach( i -> System.out.println(ct[i]));
+	}
+	
+	/**
+	 * Test of a CATS domain generator. Check the seed.
+	 */
+	@Test
+	public void testDomainCATSUncertain()
+	{
+		int numberOfAgents = 6;
+		int numberOfGoods = 4;
+		List<Integer> items = IntStream.range(0, numberOfGoods).boxed().parallel().map(i -> i+1).collect(Collectors.toList());
+		
+		double marginalValueL1 = 0.1;
+		//Local bidder
+		AtomicBid atom11 = new AtomicBid(1, Arrays.asList( items.get(0) ), marginalValueL1);
+		CombinatorialType t = new CombinatorialType( atom11 );
+		
 		GridGenerator generator = new GridGenerator(2, 2);
 		generator.setSeed(0);
 		generator.buildProximityGraph();
 		Graph grid = generator.getGrid();
 		
-		IDomainGenerator catsDomainGenerator = new DomainGeneratorCATS(numberOfGoods, grid);
+		IDomainGenerator catsDomainGenerator = new DomainGeneratorCATS(numberOfGoods);
 		
 		Type[] ct = new Type[numberOfAgents];
 		for(int i = 0; i < numberOfAgents; ++i)

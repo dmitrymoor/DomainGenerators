@@ -18,7 +18,6 @@ public class DomainGeneratorCATS implements IDomainGenerator
 	/**
 	 * A simple constructor.
 	 * @param numberOfGoods the number of goods in the auction
-	 * @param grid the spatial proximity graph
 	 */
 	public DomainGeneratorCATS(int numberOfGoods)
 	{												//TODO: jpmf should be a part of the domain (perhaps another class DomainGeneratorCATSUncertain )

@@ -277,7 +277,6 @@ public class SpatialDomainGenerator
 	
 	protected int _agentId;										//An id of the agent for which the bid should be generated
 	protected int _numberOfGoods;								//Number of goods in the auction
-	//protected int _numberOfAtoms;								//Number of atomic bids to be generated
 	protected Graph _dependencyGraph;							//Dependency graph for the spatial domain
 	protected List<Double> _commonValue;						//Common value of bidders for goods
 	protected List<AtomicBid> _bids;							//A list of generated atomic bids
