@@ -1,5 +1,6 @@
 package ch.uzh.ifi.DomainGenerators;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
@@ -44,7 +45,7 @@ public class SpatialDomainGenerator
 		_dependencyGraph = dependencyGraph;
 		_agentId = agentId;
 			
-		_commonValue = new LinkedList<Double>();						//Initialize common values for all goods
+		_commonValue = new ArrayList<Double>();						//Initialize common values for all goods
 		for(int i = 0; i < _numberOfGoods; ++i)
 		{
 			_commonValue.add( _randGenerator.nextDouble() * _MAX_GOOD_VALUE);
@@ -101,7 +102,7 @@ public class SpatialDomainGenerator
 		pn.replaceAll( p -> p/total );
 
 		//Choose a good at random with a probability distribution pn and add it to the bundle
-		List<Integer> bundle = new LinkedList<Integer>();
+		List<Integer> bundle = new ArrayList<Integer>();
 		bundle.add(pickGoodFromSet(goods, pn));
 			
 		while( (_randGenerator.nextDouble() <= _ADDITIONAL_LOCATION && bundle.size() < _numberOfGoods) || bundle.size() == 0 )//TODO use the seed
@@ -128,7 +129,7 @@ public class SpatialDomainGenerator
 		List<Double> commonValues = new LinkedList<Double>();
 		for(int i = 0; i < bundle.size(); ++i)
 		{
-			List<Integer> bundleI = new LinkedList<Integer>();
+			List<Integer> bundleI = new ArrayList<Integer>();
 			bundleI.add( bundle.get(i));
 				
 			while(bundleI.size() < bundle.size())
@@ -194,7 +195,7 @@ public class SpatialDomainGenerator
 		else
 		{
 			//Compose a list of all goods which are adjacent to a bundle (i.e., to any good from the bundle)
-			List<Integer> neighborsOfBundle = new LinkedList<Integer>();
+			List<Integer> neighborsOfBundle = new ArrayList<Integer>();
 			for(int i = 0; i < bundle.size(); ++i)
 			{
 				int goodIdx = bundle.get(i)-1;
