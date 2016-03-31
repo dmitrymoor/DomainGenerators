@@ -47,7 +47,7 @@ public class DomainGeneratorCATS implements IDomainGenerator
 		if(bid.size() == 0)  throw new RuntimeException("No atoms produced");
 
 		Type ct = new CombinatorialType();
-		bid.stream().parallel().forEach( i -> ct.addAtomicBid(i) );
+		bid.stream().forEach( i -> ct.addAtomicBid(i) );
 		return ct;
 	}
 	
