@@ -10,7 +10,7 @@ import ch.uzh.ifi.DomainGenerators.SpatialDomainGenerator;
 import ch.uzh.ifi.GraphAlgorithms.Graph;
 
 /**
- * The class generates bids using CATS "regions".
+ * The class generates bids using same approach as in CATS "regions".
  * @author Dmitry Moor
  */
 public class DomainGeneratorCATS implements IDomainGenerator
@@ -18,9 +18,10 @@ public class DomainGeneratorCATS implements IDomainGenerator
 	/**
 	 * A simple constructor.
 	 * @param numberOfGoods the number of goods in the auction
+	 * @throws SpacialDomainGenerationException if cannot create a square grid with the specified number of goods
 	 */
-	public DomainGeneratorCATS(int numberOfGoods)
-	{												//TODO: jpmf should be a part of the domain (perhaps another class DomainGeneratorCATSUncertain )
+	public DomainGeneratorCATS(int numberOfGoods) throws SpacialDomainGenerationException
+	{
 		_numberOfGoods = numberOfGoods;
 		generateGrid();
 	}
@@ -37,7 +38,7 @@ public class DomainGeneratorCATS implements IDomainGenerator
 		{
 			_spatialDomainGenerator.generateSpacialBids(seed);
 		}
-		catch (Exception e)
+		catch (SpacialDomainGenerationException e)
 		{
 			e.printStackTrace();
 		}
@@ -52,13 +53,14 @@ public class DomainGeneratorCATS implements IDomainGenerator
 	
 	/**
 	 * The method generates a rectangular spatial proximity graph (grid)
+	 * @throws SpacialDomainGenerationException if cannot create a square grid
 	 */
-	private void generateGrid()
+	private void generateGrid() throws SpacialDomainGenerationException
 	{
 		int nRows = (int)Math.round( Math.sqrt(_numberOfGoods));
 		int nCols = _numberOfGoods / nRows;
 		
-		if( nRows * nCols != _numberOfGoods ) throw new RuntimeException("Error when computing grid dimensions: nRows=" + nRows + " nCols="+nCols);
+		if( nRows * nCols != _numberOfGoods ) throw new SpacialDomainGenerationException("Error when computing grid dimensions: nRows=" + nRows + " nCols="+nCols);
 		
 		GridGenerator gridGenerator = new GridGenerator(nRows, nCols);
 		gridGenerator.setSeed(0);

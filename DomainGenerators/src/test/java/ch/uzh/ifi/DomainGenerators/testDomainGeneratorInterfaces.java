@@ -75,13 +75,19 @@ public class testDomainGeneratorInterfaces
 		AtomicBid atom11 = new AtomicBid(1, Arrays.asList( items.get(0) ), marginalValueL1);
 		CombinatorialType t = new CombinatorialType( atom11 );
 		
-		IDomainGenerator catsDomainGenerator = new DomainGeneratorCATS(numberOfGoods);
+		IDomainGenerator catsDomainGenerator;
+		try {
+			catsDomainGenerator = new DomainGeneratorCATS(numberOfGoods);
 		
-		Type[] ct = new Type[numberOfAgents];
-		for(int i = 0; i < numberOfAgents; ++i)
-			ct[i] = catsDomainGenerator.generateBid(10*i, i+1);
-//		IntStream.range(0, numberOfAgents).boxed().parallel().forEach( i -> ct[i] = catsDomainGenerator.generateBid(10*i, i+1) );
-		IntStream.range(0, numberOfAgents).boxed().parallel().forEach( i -> System.out.println(ct[i]));
+			Type[] ct = new Type[numberOfAgents];
+			for(int i = 0; i < numberOfAgents; ++i)
+				ct[i] = catsDomainGenerator.generateBid(10*i, i+1);
+//			IntStream.range(0, numberOfAgents).boxed().parallel().forEach( i -> ct[i] = catsDomainGenerator.generateBid(10*i, i+1) );
+			IntStream.range(0, numberOfAgents).boxed().parallel().forEach( i -> System.out.println(ct[i]));
+		} catch (SpacialDomainGenerationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	/**
@@ -104,12 +110,18 @@ public class testDomainGeneratorInterfaces
 		generator.buildProximityGraph();
 		Graph grid = generator.getGrid();
 		
-		IDomainGenerator catsDomainGenerator = new DomainGeneratorCATS(numberOfGoods);
+		IDomainGenerator catsDomainGenerator;
+		try {
+			catsDomainGenerator = new DomainGeneratorCATS(numberOfGoods);
 		
-		Type[] ct = new Type[numberOfAgents];
-		for(int i = 0; i < numberOfAgents; ++i)
-			ct[i] = catsDomainGenerator.generateBid(10*i, i+1);
-//		IntStream.range(0, numberOfAgents).boxed().parallel().forEach( i -> ct[i] = catsDomainGenerator.generateBid(10*i, i+1) );
-		IntStream.range(0, numberOfAgents).boxed().parallel().forEach( i -> System.out.println(ct[i]));
+			Type[] ct = new Type[numberOfAgents];
+			for(int i = 0; i < numberOfAgents; ++i)
+				ct[i] = catsDomainGenerator.generateBid(10*i, i+1);
+//			IntStream.range(0, numberOfAgents).boxed().parallel().forEach( i -> ct[i] = catsDomainGenerator.generateBid(10*i, i+1) );
+			IntStream.range(0, numberOfAgents).boxed().parallel().forEach( i -> System.out.println(ct[i]));
+		} catch (SpacialDomainGenerationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

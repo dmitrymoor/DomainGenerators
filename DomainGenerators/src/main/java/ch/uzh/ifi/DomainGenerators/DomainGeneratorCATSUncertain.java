@@ -23,8 +23,9 @@ public class DomainGeneratorCATSUncertain extends DomainGeneratorCATS
 	/***
 	 * Constructor
 	 * @param numberOfGoods number of goods in the auction
+	 * @throws SpacialDomainGenerationException if cannot create a square grid with the specified number of goods
 	 */
-	public DomainGeneratorCATSUncertain(int numberOfGoods) 
+	public DomainGeneratorCATSUncertain(int numberOfGoods) throws SpacialDomainGenerationException 
 	{
 		super(numberOfGoods);
 		_logger.debug("DomainGeneratorCATSUncertain(numberOfGoods="+numberOfGoods+")");

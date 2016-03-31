@@ -83,7 +83,7 @@ public class SpatialDomainGenerator
 	 * @param seed - a random seed
 	 * @throws Exception if the newly generated bid already exists
 	 */
-	public void generateSpacialBids(long seed) throws Exception
+	public void generateSpacialBids(long seed) throws SpacialDomainGenerationException
 	{
 		_randGenerator.setSeed(seed);
 		_bids = new LinkedList<AtomicBid>();
@@ -109,7 +109,7 @@ public class SpatialDomainGenerator
 			addGoodToBundle(bundle, pn, _dependencyGraph);
 			
 		double value = computeValue(bundle, privateValue);
-		if(value < 0) throw new Exception("Negative value for the bundle " + bundle.toString());
+		if(value < 0) throw new SpacialDomainGenerationException("Negative value for the bundle " + bundle.toString());
 		
 		_logger.debug("Bundle: " + bundle.toString() + ". Value: " + value + ".");
 		
@@ -118,7 +118,7 @@ public class SpatialDomainGenerator
 			bundle.sort(null);
 			_bids.add( constructAtom( bundle, value, _agentId) );
 		}
-		else throw new Exception("This bundle already exists");
+		else throw new SpacialDomainGenerationException("This bundle already exists");
 			
 		//2. Construct substitutable bids
 		double budget = value * _BUDGET_FACTOR;		
