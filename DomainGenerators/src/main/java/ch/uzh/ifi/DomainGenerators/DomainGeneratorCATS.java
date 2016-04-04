@@ -63,31 +63,58 @@ public class DomainGeneratorCATS implements IDomainGenerator
 			        {
 			        	numberOfDummyItems = Integer.parseInt(tokens[i+1]);
 			        	isDummyFound = true;
+			        	if( numberOfDummyItems < _numberOfAgents) throw new RuntimeException("The CATS file does not contain enough bids: " + numberOfDummyItems);
+			        	_logger.debug("Dummy found");
+			        	break;
 			        }
-			    
-			    if(isDummyFound)
-			    {
-			    	if( numberOfDummyItems < _numberOfAgents) throw new RuntimeException("The CATS file does not contain enough bids: " + numberOfDummyItems);
-			    
-			    	int dummyItemForAgent = (_numberOfGoods - 1) + agentId;
+			    if(isDummyFound) break;
+			}
+			
+			if(isDummyFound)
+			{
+				while ( (myLine = bufRead.readLine()) != null)
+				{
+				    String[] tokens = myLine.split("\t");
+				
+			    	int dummyItemForAgent = agentId == 0 ? -1 :(_numberOfGoods - 1) + agentId;
+			    	_logger.debug("Dummy item for the agent is : " + dummyItemForAgent );
+			    	
 			    	boolean isFound = false;
 			    	double value = 0.;
 			    	List<Integer> bundle = new ArrayList<Integer>();
 			    	
+			    	_logger.debug("Parse tokens: " + myLine + " #tokens=" + tokens.length);
+			    	if(tokens.length < 2) continue;
 			    	for(int i = 0; i < tokens.length; ++i)
 			    	{
+			    		_logger.debug("i="+i);
 			    		if( i == 1)
-			    			value = Integer.parseInt( tokens[i] );
+			    		{
+			    			value = Double.parseDouble( tokens[i] );
+			    			_logger.debug("Parse value = " + value);
+			    		}
+			    		if( tokens[i].equals("#") )
+			    			break;
 			    		
-			    		if( Integer.parseInt( tokens[i] ) < _numberOfGoods )
+			    		if( i > 1 && Integer.parseInt( tokens[i] ) < _numberOfGoods )
 			    			bundle.add( Integer.parseInt( tokens[i] ) );
 			    		
-			    		if( (i>0) && (Integer.parseInt(tokens[i]) == dummyItemForAgent))
+			    		if( (i>1) && (dummyItemForAgent != -1) && (Integer.parseInt(tokens[i]) == dummyItemForAgent))
+			    			isFound = true;
+			    		else if ( dummyItemForAgent == -1 && Integer.parseInt(tokens[i]) >= _numberOfGoods )
+			    		{
+			    			isFound = false;
+			    			break;
+			    		}
+			    		else if (dummyItemForAgent == -1)
 			    			isFound = true;
 			    	}
 			    	if( isFound )
+			    	{
 			    		bid.add( new AtomicBid(agentId, bundle, value) );
-			    }
+			    		_logger.debug("Found the following bid: " + bundle.toString() + " v= " + value);
+			    	}
+				}
 			}
 			bufRead.close();
 		} 
