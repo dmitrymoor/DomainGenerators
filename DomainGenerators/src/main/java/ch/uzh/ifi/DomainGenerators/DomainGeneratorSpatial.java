@@ -2,6 +2,9 @@ package ch.uzh.ifi.DomainGenerators;
 
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import ch.uzh.ifi.MechanismDesignPrimitives.AtomicBid;
 import ch.uzh.ifi.MechanismDesignPrimitives.CombinatorialType;
 import ch.uzh.ifi.MechanismDesignPrimitives.IDomainGenerator;
@@ -15,6 +18,9 @@ import ch.uzh.ifi.GraphAlgorithms.Graph;
  */
 public class DomainGeneratorSpatial implements IDomainGenerator
 {
+	
+	private static final Logger _logger = LogManager.getLogger(DomainGeneratorSpatial.class);
+	
 	/**
 	 * A simple constructor.
 	 * @param numberOfGoods the number of goods in the auction
@@ -33,6 +39,7 @@ public class DomainGeneratorSpatial implements IDomainGenerator
 	@Override
 	public Type generateBid(long seed, int agentId)
 	{
+		//The seed is used to generate same private values
 		_spatialDomainGenerator = new SpatialDomainGenerator(_numberOfGoods, _grid, agentId);
 		try
 		{

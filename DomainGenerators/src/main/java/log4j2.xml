@@ -21,6 +21,12 @@
     <Logger name="ch.uzh.ifi.DomainGenerators.DomainGeneratorCATSUncertain" level="ERROR" additivity="false">
       <AppenderRef ref="Console"/>
     </Logger>
+    <Logger name="ch.uzh.ifi.DomainGenerators.DomainGeneratorCATS" level="ERROR" additivity="false">
+      <AppenderRef ref="Console"/>
+    </Logger>
+    <Logger name="ch.uzh.ifi.DomainGenerators.DomainGeneratorSpatial" level="ERROR" additivity="false">
+      <AppenderRef ref="Console"/>
+    </Logger>
     <Root level="debug">
       <AppenderRef ref="Console" level="DEBUG"/>
     </Root>
