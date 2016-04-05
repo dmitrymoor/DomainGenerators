@@ -17,7 +17,9 @@ import ch.uzh.ifi.MechanismDesignPrimitives.IDomainGenerator;
 import ch.uzh.ifi.MechanismDesignPrimitives.Type;
 
 /**
- * The class wraps CATS "regions".
+ * The class wraps CATS "regions". Instead of calling CATS it uses CATS output files which should be pre-generated
+ * using, for example, "cats -d regions -goods 9 -bids 25". It then analyzes these files and differentiate agents
+ * based on dummy goods ids. 
  * @author Dmitry Moor
  */
 public class DomainGeneratorCATS implements IDomainGenerator
@@ -29,12 +31,14 @@ public class DomainGeneratorCATS implements IDomainGenerator
 	 * A simple constructor.
 	 * @param numberOfGoods the number of goods in the auction
 	 * @param numberOfAgents the max number of bids to generate
+	 * @param path path to the directory where all CATS files are stored
 	 * @throws SpacialDomainGenerationException if cannot create a square grid with the specified number of goods
 	 */
-	public DomainGeneratorCATS(int numberOfGoods, int numberOfAgents) throws SpacialDomainGenerationException
+	public DomainGeneratorCATS(int numberOfGoods, int numberOfAgents, String path) throws SpacialDomainGenerationException
 	{
 		_numberOfGoods = numberOfGoods;
 		_numberOfAgents = numberOfAgents;
+		_path = path;
 	}
 	
 	/**
@@ -48,10 +52,11 @@ public class DomainGeneratorCATS implements IDomainGenerator
 		List<AtomicBid> bid = new ArrayList<AtomicBid>();
 		try 
 		{
-			FileReader input = new FileReader("C:\\Users\\Dmitry\\Downloads\\files\\files\\"+ (seed<10?"000":"00")+seed+".txt");
+			FileReader input = new FileReader( _path + "\\"+ (seed<10?"000":"00")+seed+".txt");
 			BufferedReader bufRead = new BufferedReader(input);
 			String myLine = null;
 			
+			//First, check if the number of dummy items in the file is sufficient to generate bids for the specified number of agents 
 			int numberOfDummyItems = 0;
 			boolean isDummyFound = false;
 			while ( (myLine = bufRead.readLine()) != null)
@@ -63,8 +68,12 @@ public class DomainGeneratorCATS implements IDomainGenerator
 			        {
 			        	numberOfDummyItems = Integer.parseInt(tokens[i+1]);
 			        	isDummyFound = true;
-			        	if( numberOfDummyItems < _numberOfAgents) throw new RuntimeException("The CATS file does not contain enough bids: " + numberOfDummyItems);
-			        	_logger.debug("Dummy found");
+			        	if( numberOfDummyItems < _numberOfAgents)
+			        	{
+			        		bufRead.close();
+			        		throw new RuntimeException("The CATS file does not contain enough bids: " + numberOfDummyItems);
+			        	}
+			        	_logger.debug("The number of dummy items is sufficient to generate the required number of bids");
 			        	break;
 			        }
 			    if(isDummyFound) break;
@@ -75,38 +84,32 @@ public class DomainGeneratorCATS implements IDomainGenerator
 				while ( (myLine = bufRead.readLine()) != null)
 				{
 				    String[] tokens = myLine.split("\t");
-				
-			    	int dummyItemForAgent = agentId == 0 ? -1 :(_numberOfGoods - 1) + agentId;
-			    	_logger.debug("Dummy item for the agent is : " + dummyItemForAgent );
+			    	int dummyItemForAgent = (_numberOfGoods - 1) + agentId;				//An id of a dummy item for the specified agent
+			    	_logger.debug("Dummy item for agent " + agentId + " is : " + dummyItemForAgent );
 			    	
-			    	boolean isFound = false;
+			    	boolean isFound = false;											//True if the dummy item is found among generated bids
 			    	double value = 0.;
 			    	List<Integer> bundle = new ArrayList<Integer>();
 			    	
 			    	_logger.debug("Parse tokens: " + myLine + " #tokens=" + tokens.length);
-			    	if(tokens.length < 2) continue;
+			    	if(tokens.length < 2)												//Line number and a value are necessary tokens 
+			    		continue;
+			    	
 			    	for(int i = 0; i < tokens.length; ++i)
 			    	{
-			    		_logger.debug("i="+i);
 			    		if( i == 1)
 			    		{
 			    			value = Double.parseDouble( tokens[i] );
 			    			_logger.debug("Parse value = " + value);
 			    		}
+			    		
 			    		if( tokens[i].equals("#") )
 			    			break;
 			    		
 			    		if( i > 1 && Integer.parseInt( tokens[i] ) < _numberOfGoods )
 			    			bundle.add( Integer.parseInt( tokens[i] ) + 1 );
 			    		
-			    		if( (i>1) && (dummyItemForAgent != -1) && (Integer.parseInt(tokens[i]) == dummyItemForAgent))
-			    			isFound = true;
-			    		else if ( dummyItemForAgent == -1 && Integer.parseInt(tokens[i]) >= _numberOfGoods )
-			    		{
-			    			isFound = false;
-			    			break;
-			    		}
-			    		else if (dummyItemForAgent == -1)
+			    		if( (i>1) && (Integer.parseInt(tokens[i]) == dummyItemForAgent))
 			    			isFound = true;
 			    	}
 			    	if( isFound )
@@ -115,6 +118,12 @@ public class DomainGeneratorCATS implements IDomainGenerator
 			    		_logger.debug("Found the following bid: " + bundle.toString() + " v= " + value);
 			    	}
 				}
+			}
+			else
+			{
+				_logger.error("The number of dummy items cannot be identified from the file");
+				bufRead.close();
+				throw new RuntimeException("The number of dummy items cannot be identified from the file");
 			}
 			bufRead.close();
 		} 
@@ -131,8 +140,6 @@ public class DomainGeneratorCATS implements IDomainGenerator
 			e.printStackTrace();
 		}
 		
-		//if(bid.size() == 0)  throw new RuntimeException("No atoms produced");
-
 		Type ct = new CombinatorialType();
 		if(bid.size() > 0)
 			bid.stream().forEach( i -> ct.addAtomicBid(i) );
@@ -141,6 +148,6 @@ public class DomainGeneratorCATS implements IDomainGenerator
 
 	protected int _numberOfGoods;										//Number of goods in the auction
 	protected int _numberOfAgents;										//Number of agents in the auction
-	protected Graph _grid;												//Spatial proximity graph
+	protected String _path;												//Path to the directory with CATS files
 	protected SpatialDomainGenerator _spatialDomainGenerator;			//Spatial domain generator
 }
