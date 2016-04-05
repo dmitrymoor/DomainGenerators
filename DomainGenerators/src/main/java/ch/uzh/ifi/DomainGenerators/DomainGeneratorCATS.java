@@ -48,7 +48,7 @@ public class DomainGeneratorCATS implements IDomainGenerator
 		List<AtomicBid> bid = new ArrayList<AtomicBid>();
 		try 
 		{
-			FileReader input = new FileReader("C:\\Users\\Dmitry\\Downloads\\0000.txt");
+			FileReader input = new FileReader("C:\\Users\\Dmitry\\Downloads\\files\\files\\"+ (seed<10?"000":"00")+seed+".txt");
 			BufferedReader bufRead = new BufferedReader(input);
 			String myLine = null;
 			
@@ -97,7 +97,7 @@ public class DomainGeneratorCATS implements IDomainGenerator
 			    			break;
 			    		
 			    		if( i > 1 && Integer.parseInt( tokens[i] ) < _numberOfGoods )
-			    			bundle.add( Integer.parseInt( tokens[i] ) );
+			    			bundle.add( Integer.parseInt( tokens[i] ) + 1 );
 			    		
 			    		if( (i>1) && (dummyItemForAgent != -1) && (Integer.parseInt(tokens[i]) == dummyItemForAgent))
 			    			isFound = true;
@@ -131,15 +131,16 @@ public class DomainGeneratorCATS implements IDomainGenerator
 			e.printStackTrace();
 		}
 		
-		if(bid.size() == 0)  throw new RuntimeException("No atoms produced");
+		//if(bid.size() == 0)  throw new RuntimeException("No atoms produced");
 
 		Type ct = new CombinatorialType();
-		bid.stream().forEach( i -> ct.addAtomicBid(i) );
+		if(bid.size() > 0)
+			bid.stream().forEach( i -> ct.addAtomicBid(i) );
 		return ct;
 	}
 
 	protected int _numberOfGoods;										//Number of goods in the auction
-	protected int _numberOfAgents;
+	protected int _numberOfAgents;										//Number of agents in the auction
 	protected Graph _grid;												//Spatial proximity graph
 	protected SpatialDomainGenerator _spatialDomainGenerator;			//Spatial domain generator
 }
