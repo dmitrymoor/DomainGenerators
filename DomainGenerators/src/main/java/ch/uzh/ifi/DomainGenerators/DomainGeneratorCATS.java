@@ -98,10 +98,7 @@ public class DomainGeneratorCATS implements IDomainGenerator
 			    	for(int i = 0; i < tokens.length; ++i)
 			    	{
 			    		if( i == 1)
-			    		{
 			    			value = Double.parseDouble( tokens[i] );
-			    			_logger.debug("Parse value = " + value);
-			    		}
 			    		
 			    		if( tokens[i].equals("#") )
 			    			break;
