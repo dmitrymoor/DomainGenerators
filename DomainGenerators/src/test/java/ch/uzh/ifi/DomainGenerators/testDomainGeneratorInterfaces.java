@@ -13,7 +13,7 @@ import org.junit.Test;
 import ch.uzh.ifi.GraphAlgorithms.Graph;
 import ch.uzh.ifi.MechanismDesignPrimitives.AtomicBid;
 import ch.uzh.ifi.MechanismDesignPrimitives.CombinatorialType;
-import ch.uzh.ifi.DomainGenerators.DomainGeneratorCATS;
+import ch.uzh.ifi.DomainGenerators.DomainGeneratorSpatial;
 import ch.uzh.ifi.DomainGenerators.DomainGeneratorLLG;
 import ch.uzh.ifi.MechanismDesignPrimitives.IDomainGenerator;
 import ch.uzh.ifi.MechanismDesignPrimitives.Type;
@@ -64,7 +64,7 @@ public class testDomainGeneratorInterfaces
 	 * Test of a CATS domain generator.
 	 */
 	@Test
-	public void testDomainCATS()
+	public void testDomainSpatial()
 	{
 		int numberOfAgents = 6;
 		int numberOfGoods = 4;
@@ -77,7 +77,7 @@ public class testDomainGeneratorInterfaces
 		
 		IDomainGenerator catsDomainGenerator;
 		try {
-			catsDomainGenerator = new DomainGeneratorCATS(numberOfGoods);
+			catsDomainGenerator = new DomainGeneratorSpatial(numberOfGoods);
 		
 			Type[] ct = new Type[numberOfAgents];
 			for(int i = 0; i < numberOfAgents; ++i)
@@ -94,7 +94,7 @@ public class testDomainGeneratorInterfaces
 	 * Test of a CATS domain generator. Check the seed.
 	 */
 	@Test
-	public void testDomainCATSUncertain()
+	public void testDomainSpatialUncertain()
 	{
 		int numberOfAgents = 6;
 		int numberOfGoods = 4;
@@ -112,7 +112,7 @@ public class testDomainGeneratorInterfaces
 		
 		IDomainGenerator catsDomainGenerator;
 		try {
-			catsDomainGenerator = new DomainGeneratorCATS(numberOfGoods);
+			catsDomainGenerator = new DomainGeneratorSpatial(numberOfGoods);
 		
 			Type[] ct = new Type[numberOfAgents];
 			for(int i = 0; i < numberOfAgents; ++i)
