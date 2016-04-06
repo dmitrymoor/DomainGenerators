@@ -30,6 +30,7 @@ public class DomainGeneratorSpatial implements IDomainGenerator
 	{
 		_numberOfGoods = numberOfGoods;
 		generateGrid();
+		_spatialDomainGenerator = new SpatialDomainGenerator(_numberOfGoods, _grid);
 	}
 
 	/**
@@ -40,10 +41,9 @@ public class DomainGeneratorSpatial implements IDomainGenerator
 	public Type generateBid(long seed, int agentId)
 	{
 		//The seed is used to generate same private values
-		_spatialDomainGenerator = new SpatialDomainGenerator(_numberOfGoods, _grid, agentId);
 		try
 		{
-			_spatialDomainGenerator.generateSpacialBids(seed);
+			_spatialDomainGenerator.generateSpacialBids(seed, agentId);
 		}
 		catch (SpacialDomainGenerationException e)
 		{

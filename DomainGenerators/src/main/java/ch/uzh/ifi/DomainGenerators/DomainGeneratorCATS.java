@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
@@ -52,7 +53,8 @@ public class DomainGeneratorCATS implements IDomainGenerator
 		List<AtomicBid> bid = new ArrayList<AtomicBid>();
 		try 
 		{
-			FileReader input = new FileReader( _path + "\\"+ (seed<10?"000":"00")+seed+".txt");
+			String filename =  _path + "\\"+ (seed<10?"000":"00")+seed+".txt";
+			FileReader input = new FileReader( filename );
 			BufferedReader bufRead = new BufferedReader(input);
 			String myLine = null;
 			
@@ -68,17 +70,18 @@ public class DomainGeneratorCATS implements IDomainGenerator
 			        {
 			        	numberOfDummyItems = Integer.parseInt(tokens[i+1]);
 			        	isDummyFound = true;
-			        	if( numberOfDummyItems < _numberOfAgents)
-			        	{
-			        		bufRead.close();
-			        		throw new RuntimeException("The CATS file does not contain enough bids: " + numberOfDummyItems);
-			        	}
+			        	//if( numberOfDummyItems < _numberOfAgents)
+			        	//{
+			        		//bufRead.close();
+			        		//throw new RuntimeException("The CATS file does not contain enough bids: " + numberOfDummyItems);
+			        	//}
 			        	_logger.debug("The number of dummy items is sufficient to generate the required number of bids");
 			        	break;
 			        }
 			    if(isDummyFound) break;
 			}
 			
+			isDummyFound = true;
 			if(isDummyFound)
 			{
 				while ( (myLine = bufRead.readLine()) != null)
@@ -140,6 +143,8 @@ public class DomainGeneratorCATS implements IDomainGenerator
 		Type ct = new CombinatorialType();
 		if(bid.size() > 0)
 			bid.stream().forEach( i -> ct.addAtomicBid(i) );
+		else
+			ct.addAtomicBid(new AtomicBid(agentId, new ArrayList<Integer>(), 0.));
 		return ct;
 	}
 

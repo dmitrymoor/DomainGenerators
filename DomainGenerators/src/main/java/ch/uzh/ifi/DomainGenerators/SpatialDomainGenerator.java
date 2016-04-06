@@ -36,14 +36,12 @@ public class SpatialDomainGenerator
 	 * Constructor.
 	 * @param numberOfGoods - the number of goods in the auction
 	 * @param dependencyGraph - the graph representing the spatial domain
-	 * @param agentId - an id of an agent for which the bid should be generated
 	 */
-	public SpatialDomainGenerator(int numberOfGoods, Graph dependencyGraph, int agentId)
+	public SpatialDomainGenerator(int numberOfGoods, Graph dependencyGraph)
 	{
 		init();
 		_numberOfGoods = numberOfGoods;
 		_dependencyGraph = dependencyGraph;
-		_agentId = agentId;
 			
 		_commonValue = new ArrayList<Double>();						//Initialize common values for all goods
 		for(int i = 0; i < _numberOfGoods; ++i)
@@ -80,10 +78,11 @@ public class SpatialDomainGenerator
 	
 	/**
 	 * The method generates the required number of atomic bids (bundles + values)
-	 * @param seed - a random seed
+	 * @param seed a random seed
+	 * @param agentId an id of an agent for which the bid should be generated
 	 * @throws Exception if the newly generated bid already exists
 	 */
-	public void generateSpacialBids(long seed) throws SpacialDomainGenerationException
+	public void generateSpacialBids(long seed, int agentId) throws SpacialDomainGenerationException
 	{
 		_randGenerator.setSeed(seed);
 		_bids = new LinkedList<AtomicBid>();
@@ -116,7 +115,7 @@ public class SpatialDomainGenerator
 		if( ! isExists(bundle) )
 		{
 			bundle.sort(null);
-			_bids.add( constructAtom( bundle, value, _agentId) );
+			_bids.add( constructAtom( bundle, value, agentId) );
 		}
 		else throw new SpacialDomainGenerationException("This bundle already exists");
 			
@@ -159,7 +158,7 @@ public class SpatialDomainGenerator
 			if( ! isExists(sBundle) )
 			{
 				sBundle.sort(null);
-				_bids.add( constructAtom( sBundle, itsValue, _agentId) );
+				_bids.add( constructAtom( sBundle, itsValue, agentId) );
 			}
 		}
 	}
@@ -276,7 +275,6 @@ public class SpatialDomainGenerator
 		return false;
 	}
 	
-	protected int _agentId;										//An id of the agent for which the bid should be generated
 	protected int _numberOfGoods;								//Number of goods in the auction
 	protected Graph _dependencyGraph;							//Dependency graph for the spatial domain
 	protected List<Double> _commonValue;						//Common value of bidders for goods
