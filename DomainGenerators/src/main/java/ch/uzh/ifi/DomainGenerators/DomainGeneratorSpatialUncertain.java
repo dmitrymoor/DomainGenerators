@@ -37,16 +37,19 @@ public class DomainGeneratorSpatialUncertain extends DomainGeneratorSpatial
 
 	/**
 	 * The method generates a joint probability mass function.
+	 * @throws SpacialDomainGenerationException if some "bombing" parameters are still to be specified
 	 */
-	public void generateJPMF()
+	public void generateJPMF() throws SpacialDomainGenerationException
 	{
 		_logger.debug("-> generateJPMF()");
-		if( _primaryReductionCoef == null) 		throw new RuntimeException("Primary reduction coefficients are not specified");
-		if( _secondaryReductionCoef == null) 	throw new RuntimeException("Secondary reduction coefficients are not specified");
-		if( _probabilityOfBeingChosen == null) 	throw new RuntimeException("Probabilities of being chosen are not specified");
-		if( _probabilityOfExplosion == null) 	throw new RuntimeException("Probabilities of explosion are not specified");
+		if( _primaryReductionCoef == null) 		throw new SpacialDomainGenerationException("Primary reduction coefficients are not specified");
+		if( _secondaryReductionCoef == null) 	throw new SpacialDomainGenerationException("Secondary reduction coefficients are not specified");
+		if( _probabilityOfBeingChosen == null) 	throw new SpacialDomainGenerationException("Probabilities of being chosen are not specified");
+		if( _probabilityOfExplosion == null) 	throw new SpacialDomainGenerationException("Probabilities of explosion are not specified");
 		
-		List<IBombingStrategy> bombs = IntStream.range(0, _probabilityOfBeingChosen.size()).boxed().parallel().map( i -> new FocusedBombingStrategy( _grid, _probabilityOfExplosion.get(i), _primaryReductionCoef.get(i), _secondaryReductionCoef.get(i))).collect(Collectors.toList());
+		List<IBombingStrategy> bombs = IntStream.range(0, _probabilityOfBeingChosen.size()).boxed().parallel()
+				                       .map( i -> new FocusedBombingStrategy( _grid, _probabilityOfExplosion.get(i), _primaryReductionCoef.get(i), _secondaryReductionCoef.get(i)))
+				                       .collect(Collectors.toList());
 		_jpmf = new JointProbabilityMass( _grid );
 		_jpmf.setNumberOfSamples(_numberOfJPMFSamples);
 		_jpmf.setNumberOfBombsToThrow(_numberOfBombsToThrow);
@@ -79,13 +82,14 @@ public class DomainGeneratorSpatialUncertain extends DomainGeneratorSpatial
 	 * @param secondaryReductionCoef secondary reduction coefficients
 	 * @param probabilityOfBeingChosen probability of a particular bomb to be chosen
 	 * @param probabilityOfExplosion probability that a bomb explodes
+	 * @throws SpacialDomainGenerationException if wrong "bombing" parameters are specified
 	 */
-	public void setBombsParameters(List<Double> primaryReductionCoef, List<Double> secondaryReductionCoef, List<Double> probabilityOfBeingChosen, List<Double> probabilityOfExplosion)
+	public void setBombsParameters(List<Double> primaryReductionCoef, List<Double> secondaryReductionCoef, List<Double> probabilityOfBeingChosen, List<Double> probabilityOfExplosion) throws SpacialDomainGenerationException
 	{
 		if( (primaryReductionCoef.size() != secondaryReductionCoef.size()) || (primaryReductionCoef.size() != probabilityOfBeingChosen.size()) || (primaryReductionCoef.size() != probabilityOfExplosion.size()) )
-			throw new RuntimeException("Dimensionality mismatch");
+			throw new SpacialDomainGenerationException("Dimensionality mismatch");
 		if( Math.abs( probabilityOfBeingChosen.stream().reduce( (x1, x2) -> x1 + x2).get() - 1.) > 1e-6 )
-			throw new RuntimeException("The probability distribution must be normalized");
+			throw new SpacialDomainGenerationException("The probability distribution must be normalized");
 		
 		_primaryReductionCoef = primaryReductionCoef;			_logger.debug("Primary reduction coef: " + _primaryReductionCoef.toString());
 		_secondaryReductionCoef = secondaryReductionCoef;		_logger.debug("Secondary reduction coef: " + _secondaryReductionCoef.toString());
