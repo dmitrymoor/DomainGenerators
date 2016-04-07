@@ -217,6 +217,15 @@ public class SpatialDomainGenerator
 	}
 	
 	/**
+	 * The method sets up a parameter of the spatial domain generator
+	 * @param additionalLocation probability to add yet another good into bundle
+	 */
+	public void setAdditionalLocation(double additionalLocation)
+	{
+		_ADDITIONAL_LOCATION = additionalLocation;
+	}
+	
+	/**
 	 * The method picks a good from the set of goods according to the specified probability distribution.
 	 * @param goods - a set of goods from which a new good should be chosen
 	 * @param probabilityDistribution - a probability distribution over goods in the set
@@ -283,10 +292,10 @@ public class SpatialDomainGenerator
 	
 	protected final double _MAX_GOOD_VALUE = 100.;				//Max common value of a good
 	protected final double _DEVIATION = 0.5;					//Deviation describes how much a private value can differ from the common value
-	protected final double _ADDITIONAL_LOCATION = 0.7;			//Probability to add yet another good into bundle
+	protected double _ADDITIONAL_LOCATION = 0.85;				//Probability to add yet another good into bundle
 	protected final double _JUMP_PROBABILITY = 0.05;			//Probability that a bundle contains a good which is not adjacent to other goods
 	protected final double _BUDGET_FACTOR = 1.5;				//Budget factor used for substitute bids
 	protected final double _RESALE_FACTOR = 0.5;				//Resale factor used for substitute bids
 	protected final double _ADDITIVITY = 0.2;					//Positive for superadditive goods, negative for subadditive and zero for additive goods
-	protected final int _MAX_SUBSTITUTABLE_BIDS = 3;			//Maximum number of substitutes
+	protected final int _MAX_SUBSTITUTABLE_BIDS = 5;			//Maximum number of substitutes
 }

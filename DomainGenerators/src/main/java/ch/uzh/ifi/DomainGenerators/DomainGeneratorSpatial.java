@@ -28,11 +28,33 @@ public class DomainGeneratorSpatial implements IDomainGenerator
 	 */
 	public DomainGeneratorSpatial(int numberOfGoods) throws SpacialDomainGenerationException
 	{
+		init(numberOfGoods);
+	}
+
+	/**
+	 * A simple constructor.
+	 * @param numberOfGoods the number of goods in the auction
+	 * @param additionalLocation probability of yet another good to be added to the bundle
+	 * @throws SpacialDomainGenerationException if cannot create a square grid with the specified number of goods
+	 */
+	public DomainGeneratorSpatial(int numberOfGoods, double additionalLocation) throws SpacialDomainGenerationException
+	{
+		init(numberOfGoods);
+		_spatialDomainGenerator.setAdditionalLocation(additionalLocation);
+	}
+	
+	/**
+	 * Initialization
+	 * @param numberOfGoods the number of goods in the auction
+	 * @throws SpacialDomainGenerationException
+	 */
+	private void init(int numberOfGoods) throws SpacialDomainGenerationException
+	{
 		_numberOfGoods = numberOfGoods;
 		generateGrid();
 		_spatialDomainGenerator = new SpatialDomainGenerator(_numberOfGoods, _grid);
 	}
-
+	
 	/**
 	 * (non-Javadoc)
 	 * @see ch.uzh.ifi.MechanismDesignPrimitives.IDomainGenerator#generateBid(long, int)
