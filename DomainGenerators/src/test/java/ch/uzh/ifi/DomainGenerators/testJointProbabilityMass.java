@@ -238,9 +238,13 @@ public class testJointProbabilityMass
 	@Test
 	public void testGridConditional16() 
 	{
+		boolean isLowVariance = false;
+		double primaryReductionCoeff = isLowVariance ? 0.3 : 0.6;
+		double secondaryReductionCoeff = isLowVariance ? 0.2 : 0.1;
+		
 		int numberOfRows = 4;
 		int numberOfColumns = 4;
-		int numberOfBombsToThrow = 5;
+		int numberOfBombsToThrow = 7;
 		GridGenerator generator = new GridGenerator(numberOfRows, numberOfColumns);
 		generator.setSeed(0);
 		generator.buildProximityGraph();
@@ -252,15 +256,12 @@ public class testJointProbabilityMass
 		jpmf.setNumberOfSamples(1000);
 		jpmf.setNumberOfBombsToThrow(1);
 		
-		IBombingStrategy b1 = new FocusedBombingStrategy(grid, 1., 0.3, 0.2);
-		//IBombingStrategy b2 = new FocusedBombingStrategy(grid, 1., 0.4, 0.3);
+		IBombingStrategy b1 = new FocusedBombingStrategy(grid, 1., primaryReductionCoeff, secondaryReductionCoeff);
 		List<IBombingStrategy> bombs = new ArrayList<IBombingStrategy>();
 		bombs.add(b1);
-		//bombs.add(b2);
 		
 		List<Double> probDistribution = new ArrayList<Double>();
 		probDistribution.add(1.0);
-		//probDistribution.add(0.5);
 		
 		jpmf.setBombs(bombs, probDistribution);
 		jpmf.setNumberOfBombsToThrow(numberOfBombsToThrow);
